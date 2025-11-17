@@ -16,8 +16,8 @@ def generatePermutation(size: int) -> [int]:
 
     return perm
 
-# nova população aleatória
-def newPopulation() -> [[int]]:
+# novo genoma (conjunto de 100 estratégias) aleatório
+def newGenome() -> [[int]]:
     population = []
     for k in range(100):
         population.append(generatePermutation(50))
@@ -25,10 +25,9 @@ def newPopulation() -> [[int]]:
     return population
 
 # nova disposição das caixas na sala
+# codigo morto no momento, nao necessario para verificar acerto
 def newDisposition() -> [int]:
     return generatePermutation(100)
 
-print(newDisposition())
-
-# usar dicionario mapeando tag ou lista usando indice+1 ?
-# jogar em um arquivo
+if (__name__ == "__main__"):
+    print(newDisposition())
