@@ -15,13 +15,19 @@ def cross(genA: [[int]], genB: [[int]]) -> ([[int]], [[int]]):
     
     return (newGenA, newGenB)
 
-#incompleto
+
 def mutation(gen: [[int]]) -> [[int]]:
+    # escolhe dois índices diferentes para trocar
     first = random.randint(0, 99)
-    
+
     while True:
         second = random.randint(0, 99)
-        if (second != first):
+        if second != first:
             break
+
+    # troca simples (swap)
+    gen[first], gen[second] = gen[second], gen[first]
+
+    return gen
 
 

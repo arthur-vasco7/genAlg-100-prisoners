@@ -9,6 +9,3 @@ def countPrisoners(population: [[int]]) -> float:
 
     return acc/100
 
-if (__name__ == "__main__"):
-    print(countPrisoners(permutations.newGenome()))
-
