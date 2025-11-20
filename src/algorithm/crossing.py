@@ -1,6 +1,5 @@
 import random
-import fitness
-import permutations
+
 
 def cross(genA: [[int]], genB: [[int]]) -> ([[int]], [[int]]):
     # limiares de escolha definidos para forçar ao menos 1 troca sempre

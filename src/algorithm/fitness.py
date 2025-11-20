@@ -1,5 +1,6 @@
 # fintess function para avaliar a aptidão das soluções
-import permutations
+from .  import permutations
+
 
 def countPrisoners(population: [[int]]) -> float:
     acc = 0
