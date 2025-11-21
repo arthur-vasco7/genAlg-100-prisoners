@@ -1,0 +1,33 @@
+# Bytecode / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ambientes virtuais
+venv/
+.env/
+.venv/
+
+# Configurações de IDEs
+.vscode/
+.idea/
+
+# Arquivos de logs
+*.log
+
+# Distribuição / pacotes
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testes
+.coverage
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
