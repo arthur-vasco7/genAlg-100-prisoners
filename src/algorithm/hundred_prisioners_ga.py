@@ -74,13 +74,6 @@ class HundredPrisonersGA:
     def mutation(self, individual):
         """
         Applies a swap mutation to a genome representing a permutation.
-
-        Args:
-            genome (list[int]): The permutation to be mutated.
-            mutation_rate (float): Probability (0-1) of applying mutation.
-
-        Returns:
-            list[int]: The mutated genome.
         """
         mutant = individual.copy()
         if random.random() < self._mutation_rate:
