@@ -1,6 +1,4 @@
 import random
-import fitness
-import permutations
 
 def cross(genA: [[int]], genB: [[int]]) -> ([[int]], [[int]]):
     # limiares de escolha definidos para forçar ao menos 1 troca sempre
@@ -14,14 +12,4 @@ def cross(genA: [[int]], genB: [[int]]) -> ([[int]], [[int]]):
     newGenB = genB[0:start] + aux + genB[end:100]
     
     return (newGenA, newGenB)
-
-#incompleto
-def mutation(gen: [[int]]) -> [[int]]:
-    first = random.randint(0, 99)
-    
-    while True:
-        second = random.randint(0, 99)
-        if (second != first):
-            break
-
 

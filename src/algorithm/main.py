@@ -1,6 +1,6 @@
 import permutation
-from . import fitness
-from . import crossing
+import fitness
+import crossing
 import mutation
 
 # ALGORITMO GENÉTICO 
@@ -15,7 +15,7 @@ def main():
     POP_SIZE = 200
     GENERATIONS = 500
     CROSSOVER_RATE = 0.9
-    MUTATION_RATE = 0.2
+    MUTATION_RATE = 0.1
 
     #inicizaliar pop
     population = permutation.generate_population()

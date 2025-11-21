@@ -31,11 +31,9 @@ def generate_permutation(size: int) -> list[int]:
         size (int): The size of the permutation (e.g. 100).
 
     Returns:
-        list[int]: A random permutation containing all integers in the range [1, size]
+        list[int]: A random permutation containing all integers in the range [1, 100]
     """
-    perm = list(range(1, size+1))
-    random.shuffle(perm)
-    return perm
+    return random.sample(range(1,101), size)
 
 def generate_population(pop_size: int) -> list[list[int]]:
     """
@@ -50,3 +48,7 @@ def generate_population(pop_size: int) -> list[list[int]]:
                          each one being a permutation of 1 to 100.
     """
     return [generate_permutation(50) for _ in range(pop_size)]
+
+def generate_solution() -> list[int]:
+    # Gera solução (disposição das caixas)
+    return generate_permutation(100)
