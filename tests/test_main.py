@@ -1,4 +1,5 @@
-from src.algorithm import main
+from src import main
+
 
 def test_radom():
     assert (main.random_strategy()) == 0.0
@@ -10,7 +11,7 @@ def test_cycle():
 def test_prisoner_radom_sucess_all():
     sucess = True
     prisoners = main.random_strategy_prisoners(boxes = lambda: list(range(100))
-)
+                                               )
 
     for prison in prisoners:
         if prisoners is False:
