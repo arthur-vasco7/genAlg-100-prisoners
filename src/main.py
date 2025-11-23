@@ -1,7 +1,12 @@
 from algorithm.hundred_prisioners_ga import HundredPrisonersGA
+from random import shuffle
+
+# target_perm = shuffle(list(range(100)))
+caixas = [0,1,2,3,4,5,6,7,8,9]
 
 def main():
     ga = HundredPrisonersGA()
+    #ga = HundredPrisonersGA(target=caixas, fitness_mode="target")
     best, best_fitness, num_generation = ga.run()
 
     print(f"The best Fitness {best_fitness:.2f}")
@@ -10,3 +15,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

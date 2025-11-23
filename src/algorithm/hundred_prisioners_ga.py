@@ -1,18 +1,19 @@
 import random
 
-
 class HundredPrisonersGA:
 
     def __init__(
         self,
-        chromosome_length=100,
+        chromosome_length=10,
         population_size=50,
-        num_generations=500,
-        mutation_rate=0.1,
+        num_generations=100,
+        mutation_rate=0.2,
         crossover_rate=0.8,
         parents_portion=0.4,
         elitism=True,
         stop_when_perfect_fitness=False,
+        fitness_mode="prisoners",
+        target=None,  
     ):
         self._chromosome_length = chromosome_length
         self._population_size = population_size
@@ -22,6 +23,8 @@ class HundredPrisonersGA:
         self._parents_portion = parents_portion
         self._elitism = elitism
         self._stop_when_perfect_fitness = stop_when_perfect_fitness
+        self._fitness_mode = fitness_mode
+        self._target = target
 
     def _initial_population(self):
         """Return initial population of permutations for"""
@@ -34,7 +37,19 @@ class HundredPrisonersGA:
         return population
 
     def eval_fitness(self, population):
-        """Fitness = number of prisoners who can find their own number."""
+
+        if self._fitness_mode == "prisoners":
+            return self._fitness_prisoners(population)
+
+        elif self._fitness_mode == "target":
+            if self._target is None:
+                raise ValueError("Você escolheu fitness 'target', mas não passou um target.")
+            return self._fitness_target(population, self._target)
+
+        else:
+            raise ValueError("Fitness mode inválido.")
+    
+    def _fitness_prisoners(self, population):
         fitness_values = []
 
         for individual in population:
@@ -50,6 +65,13 @@ class HundredPrisonersGA:
 
             fitness_values.append(successes)
 
+        return fitness_values
+
+    def _fitness_target(self, population, target):
+        fitness_values = []
+        for individual in population:
+            score = sum(1 for i in range(len(individual)) if individual[i] == target[i])
+            fitness_values.append(score)
         return fitness_values
 
     def cross(self, gen_a, gen_b):
@@ -124,15 +146,17 @@ class HundredPrisonersGA:
         generation = 0
         best_individual = None
         best_fitness = 0
-        count = 0
-        generation = 0
 
         while generation < self._num_generations:
             fitness_values = self.eval_fitness(population)
             parents = self.select_parents(population, fitness_values)
             population = self.generate_new_population(parents)
 
+            fitness_values = self.eval_fitness(population)
             current_best, current_fit = self.get_best(population, fitness_values)
+            print(f"Geração {generation} | Melhor fitness: {current_fit}")
+            print(f"Melhor indivíduo: {current_best}")
+            print("-" * 40)
 
             # Update global best
             if current_fit > best_fitness:
