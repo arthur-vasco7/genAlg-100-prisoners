@@ -46,6 +46,21 @@ def test_init_params():
 
 "Tests for population initialization in HundredPrisonersGA."
 
+def test_disposition_is_permutation_of_100():
+    ga = HundredPrisonersGA(chromosome_length=100, population_size=1)
+    disposition = ga._initial_population()[0]
+    assert len(disposition) == 100
+    assert len(set(disposition)) == 100
+
+
+def test_population_is_list_of_permutations():
+    ga = HundredPrisonersGA(chromosome_length=100, population_size=100)
+    population = ga._initial_population()
+    assert len(population) == 100
+    for individual in population:
+        assert len(individual) == 100
+        assert len(set(individual)) == 100
+
 def test_initial_population_is_permutations():
     ga = HundredPrisonersGA(chromosome_length=10, population_size=20)
     population = ga._initial_population()
@@ -216,21 +231,6 @@ def test_eval_fitness_target_mode_valid():
     fitness = hp_ga.eval_fitness(population)
 
     assert fitness == [2, 3]
-
-def test_eval_fitness_target_mode_missing_target():
-    "Tests that eval_fitness raises an error when target mode is selected but no target is provided."
-    hp_ga._fitness_mode = "target"
-    hp_ga._target = None
-
-    with pytest.raises(ValueError):
-        hp_ga.eval_fitness([[1, 2, 3]])
-
-def test_eval_fitness_invalid_mode():
-    "Tests that eval_fitness raises an error when an invalid fitness mode is used."
-    hp_ga._fitness_mode = "invalid_mode"
-
-    with pytest.raises(ValueError):
-        hp_ga.eval_fitness([[1, 2, 3]])
 
 "Test for crossover in HundredPrisonersGA"
 
@@ -527,3 +527,16 @@ def test_run_returns_expected_types_and_bounds():
     assert isinstance(generations, int)
     # fitness nunca excede o comprimento do cromossomo
     assert best_fitness <= 6
+
+
+def test_run_stops_on_perfect_fitness():
+    ga = HundredPrisonersGA(
+        chromosome_length=3,
+        num_generations=100,
+        stop_when_perfect_fitness=True,
+    )
+    best_individual, best_fitness, generations = ga.run()
+
+    # O algoritmo deve parar imediatamente
+    assert generations != 100, "GA não parou na geração correta"
+    assert best_fitness == 3, "Fitness perfeito não foi registrado"

@@ -3,7 +3,6 @@
 
 from algorithm.hundred_prisioners_ga import HundredPrisonersGA
 
-
 def main():
     """Main entry point for running the 100 Prisoners GA algorithm."""
     ga = HundredPrisonersGA()

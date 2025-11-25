@@ -3,7 +3,6 @@ import pytest
 
 from src.algorithm.hundred_prisioners_ga import HundredPrisonersGA
 
-
 def test_eval_fitness_target_without_target_raises():
     ga = HundredPrisonersGA(fitness_mode="target", target=None)
     population = [[0]]
@@ -15,8 +14,6 @@ def test_eval_fitness_invalid_mode_raises():
     population = [[0, 1, 2]]
     with pytest.raises(ValueError, match="Invalid fitness mode"):
         ga.eval_fitness(population)
-
-
 
 def test_generate_new_population_with_insufficient_parents_raises():
     # quando há menos de 2 pais, random.sample(parents, 2) deve levantar ValueError

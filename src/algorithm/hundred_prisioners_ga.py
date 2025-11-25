@@ -68,23 +68,22 @@ class HundredPrisonersGA:
             fitness_values.append(self._eval_fitness_prisioners_indivual(individual))
 
         return fitness_values
-    
 
     def _eval_fitness_prisioners_indivual(self, individual):
         survivors = 0
 
         for prisoner in range(self._chromosome_length):
-                box = prisoner
-                found = False
-                # Each prisoner can open half of the boxes
-                for _ in range(self._chromosome_length // 2):
-                    if individual[box] == prisoner:
-                        found = True
-                        break
-                    box = individual[box]
+            box = prisoner
+            found = False
+            # Each prisoner can open half of the boxes
+            for _ in range(self._chromosome_length // 2):
+                if individual[box] == prisoner:
+                    found = True
+                    break
+                box = individual[box]
 
-                if found:
-                    survivors += 1
+            if found:
+                survivors += 1
         return survivors
 
 
