@@ -2,7 +2,6 @@ from algorithm.hundred_prisioners_ga import HundredPrisonersGA
 from random import shuffle
 
 # target_perm = shuffle(list(range(100)))
-caixas = [0,1,2,3,4,5,6,7,8,9]
 
 def main():
     ga = HundredPrisonersGA()
