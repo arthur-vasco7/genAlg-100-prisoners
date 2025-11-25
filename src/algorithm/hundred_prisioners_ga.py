@@ -4,12 +4,14 @@ class HundredPrisonersGA:
 
     def __init__(
         self,
+        chromosome_length=100,
         population_size=50,
         num_generations=100,
         mutation_rate=0.2,
         crossover_rate=0.8,
         parents_portion=0.4,
         elitism=True,
+        stop_when_perfect_fitness=True,
         fitness_mode="prisoners",
         target=None,  
     ):
@@ -74,6 +76,8 @@ class HundredPrisonersGA:
 
     def cross(self, gen_a, gen_b):
         """Return a child permutation by mixing two parents without repetition."""
+        if len(gen_a) < 2 or len(gen_b) < 2:
+            raise ValueError("Crossing requires individuals with at least 2 genes.")
 
         if random.random() > self._crossover_rate:
             return gen_a.copy()
