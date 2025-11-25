@@ -7,15 +7,15 @@ from src.algorithm.hundred_prisioners_ga import HundredPrisonersGA
 def test_eval_fitness_target_without_target_raises():
     ga = HundredPrisonersGA(fitness_mode="target", target=None)
     population = [[0]]
-    with pytest.raises(ValueError, match="Você escolheu fitness 'target'"):
+    with pytest.raises(ValueError, match="Fitness mode 'target' selected but no target provided"):
         ga.eval_fitness(population)
-
 
 def test_eval_fitness_invalid_mode_raises():
-    ga = HundredPrisonersGA(fitness_mode="modo_invalido")
+    ga = HundredPrisonersGA(fitness_mode="invalid_mode")
     population = [[0, 1, 2]]
-    with pytest.raises(ValueError, match="Fitness mode inválido"):
+    with pytest.raises(ValueError, match="Invalid fitness mode"):
         ga.eval_fitness(population)
+
 
 
 def test_generate_new_population_with_insufficient_parents_raises():

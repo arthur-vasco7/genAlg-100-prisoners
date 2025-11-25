@@ -2,3 +2,6 @@
 pythonpath = ["src"]
 addopts = "--cov=src --cov-report=term-missing --cov-report=html"
 testpaths = ["tests"]
+
+[tool.pylint]
+init-hook = "import sys; sys.path.append('src')"

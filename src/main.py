@@ -1,11 +1,12 @@
-from algorithm.hundred_prisioners_ga import HundredPrisonersGA
-from random import shuffle
+"""Main module to run the 100 Prisoners GA algorithm."""
 
-# target_perm = shuffle(list(range(100)))
+
+from algorithm.hundred_prisioners_ga import HundredPrisonersGA
+
 
 def main():
+    """Main entry point for running the 100 Prisoners GA algorithm."""
     ga = HundredPrisonersGA()
-    #ga = HundredPrisonersGA(target=caixas, fitness_mode="target")
     best, best_fitness, num_generation = ga.run()
 
     print(f"The best Fitness {best_fitness:.2f}")
@@ -14,4 +15,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

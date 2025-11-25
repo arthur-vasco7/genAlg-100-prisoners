@@ -1,6 +1,19 @@
+"""
+Module implementing a Genetic Algorithm for the 100 Prisoners problem.
+
+Contains the `HundredPrisonersGA` class with methods for:
+- Initializing population
+- Evaluating fitness
+- Crossover and mutation
+- Selecting parents
+- Running the main GA loop
+"""
+
+
 import random
 
 class HundredPrisonersGA:
+    """Genetic algorithm for the 100 prisoners problem or a generic target permutation problem."""
 
     def __init__(
         self,
@@ -11,10 +24,11 @@ class HundredPrisonersGA:
         crossover_rate=0.8,
         parents_portion=0.4,
         elitism=True,
-        stop_when_perfect_fitness=True,
+        stop_when_perfect_fitness=False,
         fitness_mode="prisoners",
-        target=None,  
+        target=None,
     ):
+        # === Algorithm configuration ===
         self._chromosome_length = chromosome_length
         self._population_size = population_size
         self._num_generations = num_generations
@@ -23,12 +37,11 @@ class HundredPrisonersGA:
         self._parents_portion = parents_portion
         self._elitism = elitism
         self._stop_when_perfect_fitness = stop_when_perfect_fitness
-        self._fitness_mode = fitness_mode
-        self._target = target
+        self._fitness_mode = fitness_mode  # 'prisoners' or 'target'
+        self._target = target  # target permutation if using 'target' fitness
 
     def _initial_population(self):
-        """Return initial population of permutations for"""
-        """the 100 prisoners problem."""
+        """Generate the initial population of random permutations."""
         population = []
         for _ in range(self._population_size):
             individual = list(range(self._chromosome_length))
@@ -37,37 +50,32 @@ class HundredPrisonersGA:
         return population
 
     def eval_fitness(self, population):
-
+        """Evaluate fitness of a population according to the selected mode."""
         if self._fitness_mode == "prisoners":
             return self._fitness_prisoners(population)
-
-        elif self._fitness_mode == "target":
+        if self._fitness_mode == "target":
             if self._target is None:
-                raise ValueError("Você escolheu fitness 'target', mas não passou um target.")
+                raise ValueError("Fitness mode 'target' selected but no target provided.")
             return self._fitness_target(population, self._target)
+        raise ValueError("Invalid fitness mode.")
 
-        else:
-            raise ValueError("Fitness mode inválido.")
-    
     def _fitness_prisoners(self, population):
+        """Fitness evaluation for the 100 prisoners problem."""
         fitness_values = []
-
         for individual in population:
             successes = 0
             for prisoner in range(self._chromosome_length):
                 box = prisoner
-
                 for _ in range(self._chromosome_length // 2):
                     if individual[box] == prisoner:
                         successes += 1
                         break
                     box = individual[box]
-
             fitness_values.append(successes)
-
         return fitness_values
 
     def _fitness_target(self, population, target):
+        """Fitness evaluation comparing individual to a target permutation."""
         fitness_values = []
         for individual in population:
             score = sum(1 for i in range(len(individual)) if individual[i] == target[i])
@@ -75,30 +83,22 @@ class HundredPrisonersGA:
         return fitness_values
 
     def cross(self, gen_a, gen_b):
-        """Return a child permutation by mixing two parents without repetition."""
+        """Create a child permutation by combining two parents without duplicates."""
         if len(gen_a) < 2 or len(gen_b) < 2:
-            raise ValueError("Crossing requires individuals with at least 2 genes.")
-
+            raise ValueError("Crossing requires at least 2 genes per individual.")
         if random.random() > self._crossover_rate:
             return gen_a.copy()
-
         size = len(gen_a)
-
         start = random.randint(0, size - 2)
         end = random.randint(start + 1, size - 1)
-
         child = gen_a[start:end]
-
         for gene in gen_b:
             if gene not in child:
                 child.append(gene)
-
         return child
 
     def mutation(self, individual):
-        """
-        Applies a swap mutation to a genome representing a permutation.
-        """
+        """Apply swap mutation to a permutation."""
         mutant = individual.copy()
         if random.random() < self._mutation_rate:
             i, j = random.sample(range(len(mutant)), 2)
@@ -106,43 +106,37 @@ class HundredPrisonersGA:
         return mutant
 
     def select_parents(self, population, fitness_values):
-        """Select the top portion of the population as parents."""
+        """Select top-performing individuals as parents."""
         n_parents = int(len(population) * self._parents_portion)
-
         sorted_population = [
             x for _, x in sorted(zip(fitness_values, population), reverse=True)
         ]
         return sorted_population[:n_parents]
 
     def generate_new_population(self, parents):
-        """Generate a new population from parents"""
-        """using crossover, mutation, and optional elitism."""
+        """Generate new population using crossover, mutation, and optional elitism."""
         new_population = []
-
-        # === optional elitismo
         if self._elitism:
             fitness_values = self.eval_fitness(parents)
             best_parent, _ = self.get_best(parents, fitness_values)
             new_population.append(best_parent.copy())
-
         while len(new_population) < self._population_size:
             parent1, parent2 = random.sample(parents, 2)
             child = self.cross(parent1, parent2)
             child = self.mutation(child)
             new_population.append(child)
-
         return new_population
 
     def get_best(self, population, fitness_values):
-        """Return the best individual and its fitness."""
+        """Return the best individual and its fitness in the population."""
         best_index = fitness_values.index(max(fitness_values))
         return population[best_index], fitness_values[best_index]
 
     # ==============================
     # MAIN ALGORITHM
     # ==============================
-
     def run(self):
+        """Run the genetic algorithm until max generations or perfect fitness."""
         population = self._initial_population()
         count = 0
         generation = 0
@@ -156,8 +150,8 @@ class HundredPrisonersGA:
 
             fitness_values = self.eval_fitness(population)
             current_best, current_fit = self.get_best(population, fitness_values)
-            print(f"Geração {generation} | Melhor fitness: {current_fit}")
-            print(f"Melhor indivíduo: {current_best}")
+            print(f"Generation {generation} | Best fitness: {current_fit}")
+            print(f"Best individual: {current_best}")
             print("-" * 40)
 
             # Update global best
@@ -167,7 +161,7 @@ class HundredPrisonersGA:
             else:
                 count += 1
 
-            # Só para se a flag estiver ativa e a paciência atingir limite
+            # Stop early if perfect fitness reached and patience exceeded
             if self._stop_when_perfect_fitness and count >= 10:
                 break
 
