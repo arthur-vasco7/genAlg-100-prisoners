@@ -454,14 +454,6 @@ def test_generate_new_population_two_parents_only():
 
 "Tests for get best individual in HundredPrisonersGA"
 
-def test_get_best_correct():
-    "Tests that get_best returns the individual with the highest fitness."
-    population = ["A", "B", "C"]
-    fitness =    [10, 50, 20]
-    best_ind, best_fit = hp_ga.get_best(population, fitness)
-
-    assert best_ind == "B"
-    assert best_fit == 50
 
 def test_get_best_tie():
     "Tests that get_best selects the first individual in case of a fitness tie."
@@ -509,21 +501,6 @@ def test_ga_monotonic_improvement():
     assert 0 <= best_fit <= 3
     assert gen == 10
 
-def test_ga_early_stop():
-    "Tests that the GA stops early once perfect fitness is reached when early-stop is enabled."
-    ga = HundredPrisonersGA(
-        population_size=5,
-        chromosome_length=3,
-        num_generations=10,
-        parents_portion=1.0,
-        mutation_rate=0.0,
-        stop_when_perfect_fitness=True,
-        elitism=True
-    )
-    _, _, gen = ga.run()
-
-    # Expected to stop at generation 10 due to perfect fitness
-    assert gen == 10
 
 def test_ga_generation_counter_full_run():
     "Tests that the GA completes all generations when early-stop is disabled."

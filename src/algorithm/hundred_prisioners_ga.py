@@ -18,8 +18,8 @@ class HundredPrisonersGA:
     def __init__(
         self,
         chromosome_length=100,
-        population_size=50,
-        num_generations=100,
+        population_size=5,
+        num_generations=500,
         mutation_rate=0.2,
         crossover_rate=0.8,
         parents_portion=0.4,
@@ -28,7 +28,6 @@ class HundredPrisonersGA:
         fitness_mode="prisoners",
         target=None,
     ):
-        # === Algorithm configuration ===
         self._chromosome_length = chromosome_length
         self._population_size = population_size
         self._num_generations = num_generations
@@ -60,19 +59,34 @@ class HundredPrisonersGA:
         raise ValueError("Invalid fitness mode.")
 
     def _fitness_prisoners(self, population):
-        """Fitness evaluation for the 100 prisoners problem."""
+        """Fitness evaluation for the 100 prisoners problem.
+
+        Returns the number of prisoners who find their number for each individual."""
         fitness_values = []
+
         for individual in population:
-            successes = 0
-            for prisoner in range(self._chromosome_length):
+            fitness_values.append(self._eval_fitness_prisioners_indivual(individual))
+
+        return fitness_values
+    
+
+    def _eval_fitness_prisioners_indivual(self, individual):
+        survivors = 0
+
+        for prisoner in range(self._chromosome_length):
                 box = prisoner
+                found = False
+                # Each prisoner can open half of the boxes
                 for _ in range(self._chromosome_length // 2):
                     if individual[box] == prisoner:
-                        successes += 1
+                        found = True
                         break
                     box = individual[box]
-            fitness_values.append(successes)
-        return fitness_values
+
+                if found:
+                    survivors += 1
+        return survivors
+
 
     def _fitness_target(self, population, target):
         """Fitness evaluation comparing individual to a target permutation."""
@@ -128,9 +142,18 @@ class HundredPrisonersGA:
         return new_population
 
     def get_best(self, population, fitness_values):
-        """Return the best individual and its fitness in the population."""
-        best_index = fitness_values.index(max(fitness_values))
+        """Return the best individual considering that all prisoners survive is best."""
+        # Prioriza indivíduos que fizeram todos sobreviverem
+        perfect_value = self._chromosome_length
+        if perfect_value in fitness_values:
+            best_index = fitness_values.index(perfect_value)
+        else:
+            # Caso nenhum seja perfeito, retorna o que teve mais sobreviventes
+            best_index = fitness_values.index(max(fitness_values))
+
         return population[best_index], fitness_values[best_index]
+
+
 
     # ==============================
     # MAIN ALGORITHM
@@ -145,26 +168,25 @@ class HundredPrisonersGA:
 
         while generation < self._num_generations:
             fitness_values = self.eval_fitness(population)
-            parents = self.select_parents(population, fitness_values)
-            population = self.generate_new_population(parents)
-
-            fitness_values = self.eval_fitness(population)
             current_best, current_fit = self.get_best(population, fitness_values)
-            print(f"Generation {generation} | Best fitness: {current_fit}")
+
+            print(f"Generation {generation+1} | Best fitness: {current_fit}")
             print(f"Best individual: {current_best}")
             print("-" * 40)
 
-            # Update global best
             if current_fit > best_fitness:
                 best_individual, best_fitness = current_best, current_fit
-                count = 0  # reset patience if improved
+                count = 0
             else:
                 count += 1
 
-            # Stop early if perfect fitness reached and patience exceeded
-            if self._stop_when_perfect_fitness and count >= 10:
+            generation += 1
+
+            if self._stop_when_perfect_fitness and best_fitness == self._chromosome_length:
                 break
 
-            generation += 1
+            parents = self.select_parents(population, fitness_values)
+            population = self.generate_new_population(parents)
+
 
         return best_individual, best_fitness, generation

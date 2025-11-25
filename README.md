@@ -94,3 +94,36 @@ Algoritmos genéticos usam de conceitos da biologia e da teoria da evolução pa
 - Mutação: Toque de aleatoriedade para garantir que novas soluções apareçam, a fim de evitar loops de gerações inferiores à anterior.
 
 Esse processo é repetido até que a próxima geração esteja completa. A quantidade máxima de gerações (iterações) pode ser estabelecida, ou até que se encontre uma solução que satisfaça o propósito.
+
+
+
+### Execução
+
+* **Configuração do ambiente e execução do código principal**:
+
+  1. Criar o ambiente virtual:
+
+     ```bash
+     python3 -m venv .venv
+     ```
+  2. Ativar o ambiente virtual:
+
+     ```bash
+     source .venv/bin/activate
+     ```
+  3. Instalar as dependências:
+
+     ```bash
+     pip install -r requirements.txt
+     ```
+  4. Executar o programa principal:
+
+     ```bash
+     python3 -m src.main
+     ```
+
+* **Executar a análise de tempo**:
+
+  ```bash
+  python3 -m src.analyze.time_analyse
+  ```
