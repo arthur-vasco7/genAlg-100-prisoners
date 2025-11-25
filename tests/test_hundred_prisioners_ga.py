@@ -1,5 +1,4 @@
 "Tests for HundredPrisonersGA functions."
-# pylint: disable=protected-access
 
 import random
 import pytest
